@@ -41,7 +41,8 @@ extern SPI_HandleTypeDef hspi1;
 void MX_SPI1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+uint8_t SPI1_WriteByte(uint8_t* data, uint16_t size);
+uint8_t SPI1_WriteByte_DMA(const uint8_t* data, uint16_t size);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

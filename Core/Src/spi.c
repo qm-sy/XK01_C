@@ -21,7 +21,7 @@
 #include "spi.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "sys.h"
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi1;
@@ -137,5 +137,14 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
 }
 
 /* USER CODE BEGIN 1 */
+uint8_t SPI1_WriteByte(uint8_t* data, uint16_t size)
+{
+	return HAL_SPI_Transmit(&hspi1, data, size, 0xff);
+}
 
+
+uint8_t SPI1_WriteByte_DMA(const uint8_t* data, uint16_t size)
+{
+	return HAL_SPI_Transmit_DMA(&hspi1, data, size);
+}
 /* USER CODE END 1 */

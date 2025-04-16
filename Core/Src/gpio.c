@@ -55,14 +55,14 @@ void MX_GPIO_Init(void)
                           |led1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, TFT_RESET_Pin|OUT_24V_Pin|AC220_1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, TFT_RESET_Pin|OUT_24V_Pin|LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, Buzzer_Pin|DR3_485_Pin|led5_Pin|led4_Pin
-                          |led3_Pin|AC220_3_Pin|AC220_4_Pin|ZERO_Pin, GPIO_PIN_RESET);
+                          |led3_Pin|AC220_2_Pin|AC220_3_Pin|AC220_4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(AC220_2_GPIO_Port, AC220_2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(AC220_1_GPIO_Port, AC220_1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : DR2_485_Pin TFT_DC_Pin DR1_485_Pin led2_Pin
                            led1_Pin */
@@ -73,17 +73,17 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : TFT_RESET_Pin OUT_24V_Pin AC220_1_Pin */
-  GPIO_InitStruct.Pin = TFT_RESET_Pin|OUT_24V_Pin|AC220_1_Pin;
+  /*Configure GPIO pins : TFT_RESET_Pin OUT_24V_Pin LED_Pin */
+  GPIO_InitStruct.Pin = TFT_RESET_Pin|OUT_24V_Pin|LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : Buzzer_Pin DR3_485_Pin led5_Pin led4_Pin
-                           led3_Pin AC220_3_Pin AC220_4_Pin ZERO_Pin */
+                           led3_Pin AC220_2_Pin AC220_3_Pin AC220_4_Pin */
   GPIO_InitStruct.Pin = Buzzer_Pin|DR3_485_Pin|led5_Pin|led4_Pin
-                          |led3_Pin|AC220_3_Pin|AC220_4_Pin|ZERO_Pin;
+                          |led3_Pin|AC220_2_Pin|AC220_3_Pin|AC220_4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -101,18 +101,18 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(button1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : AC220_2_Pin */
-  GPIO_InitStruct.Pin = AC220_2_Pin;
+  /*Configure GPIO pin : AC220_1_Pin */
+  GPIO_InitStruct.Pin = AC220_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(AC220_2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(AC220_1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB6 */
-  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  /*Configure GPIO pin : ZERO_Pin */
+  GPIO_InitStruct.Pin = ZERO_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(ZERO_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);

@@ -27,7 +27,15 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "temp.h"
+#include "PWM_CRL.h"
+#include "ST7789V2.h"
+#include "modbus_rtu.h"
+#include "POWER_CRL.h"
+#include "KEY_CRL.h"
+#include "GUI.h"
 
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,15 +111,26 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+	HAL_ADCEx_Calibration_Start(&hadc1);      //ADC校准
+	HAL_TIM_Base_Start_IT(&htim5);			      //TIM5使能
+	HAL_TIM_Base_Start_IT(&htim6);			      //TIM6使能
+	HAL_TIM_Base_Start_IT(&htim7);			      //TIM7使能
 
+  LCD_Init();
+  gui_init();
+  LCD_Clear(RED);
+  delay_ms(300);
+  LCD_Clear(BLACK);
+  gui_icon_init();
   /* USER CODE END 2 */
-
+  printf("========= code start ========= \r\n");
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-
+    key_scan();
+	icon_beat(gui_beat.beat_select,gui_beat.beat_switch);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -164,7 +183,26 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+/*
+  * @brief 重定向c库函数printf到USARTx
+  * @retval None
+*/
+int fputc(int ch, FILE *f)
+{
+    HAL_UART_Transmit(&huart4, (uint8_t *)&ch, 1, 0xffff);
+    return ch;
+}
 
+/**
+  * @brief 重定向c库函数getchar,scanf到USARTx
+  * @retval None
+  */
+int fgetc(FILE *f)
+{
+    uint8_t ch = 0;
+    HAL_UART_Receive(&huart4, &ch, 1, 0xffff);
+    return ch;
+}
 /* USER CODE END 4 */
 
 /**

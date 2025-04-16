@@ -31,7 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "sys.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -117,22 +117,33 @@ void Error_Handler(void);
 #define TX4_GPIO_Port GPIOC
 #define RX4_Pin GPIO_PIN_11
 #define RX4_GPIO_Port GPIOC
-#define AC220_1_Pin GPIO_PIN_12
-#define AC220_1_GPIO_Port GPIOC
-#define AC220_2_Pin GPIO_PIN_2
-#define AC220_2_GPIO_Port GPIOD
-#define AC220_3_Pin GPIO_PIN_3
+#define LED_Pin GPIO_PIN_12
+#define LED_GPIO_Port GPIOC
+#define AC220_1_Pin GPIO_PIN_2
+#define AC220_1_GPIO_Port GPIOD
+#define AC220_2_Pin GPIO_PIN_3
+#define AC220_2_GPIO_Port GPIOB
+#define AC220_3_Pin GPIO_PIN_4
 #define AC220_3_GPIO_Port GPIOB
-#define AC220_4_Pin GPIO_PIN_4
+#define AC220_4_Pin GPIO_PIN_5
 #define AC220_4_GPIO_Port GPIOB
-#define ZERO_Pin GPIO_PIN_5
+#define ZERO_Pin GPIO_PIN_6
 #define ZERO_GPIO_Port GPIOB
+#define ZERO_EXTI_IRQn EXTI9_5_IRQn
 #define PWM1_Pin GPIO_PIN_8
 #define PWM1_GPIO_Port GPIOB
 #define PWM2_Pin GPIO_PIN_9
 #define PWM2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define TX1_485 HAL_GPIO_WritePin(TX1_485_GPIO_Port,TX1_485_Pin,GPIO_PIN_SET)
+#define RX1_485 HAL_GPIO_WritePin(RX1_485_GPIO_Port,RX1_485_Pin,GPIO_PIN_RESET)
+
+#define TX2_485 HAL_GPIO_WritePin(TX2_485_GPIO_Port,TX2_485_Pin,GPIO_PIN_SET)
+#define RX2_485 HAL_GPIO_WritePin(RX2_485_GPIO_Port,RX2_485_Pin,GPIO_PIN_RESET)
+
+#define TX3_485 HAL_GPIO_WritePin(TX3_485_GPIO_Port,TX3_485_Pin,GPIO_PIN_SET)
+#define RX3_485 HAL_GPIO_WritePin(RX3_485_GPIO_Port,RX3_485_Pin,GPIO_PIN_RESET)
 
 /* USER CODE END Private defines */
 

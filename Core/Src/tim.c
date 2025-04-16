@@ -342,5 +342,64 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	static uint8_t key_scan_cnt = 0;
+	static uint8_t beat_delay_cnt = 0;
+  static uint8_t modbus_04_scan_cnt = 0;
+    
+	if( htim->Instance == htim5.Instance ) 			//timer5:T = 10ms
+	{
+		if( key.key_scan_flag == 0 )
+		{
+			key_scan_cnt++;
+			if( key_scan_cnt == 5 )
+			{
+				key.key_scan_flag = 1;
+				key_scan_cnt = 0;
+			}
+		}
+		
+		/* 				beat 				*/
+		if(( gui_beat.beat_switch == 1 ) && ( gui_beat.beat_start_flag == 0 ))
+		{
+			beat_delay_cnt++;
+
+			/* 				300ms 刷新一次 				*/
+			if( beat_delay_cnt == 30 )
+			{
+        beat_delay_cnt = 0;
+				gui_beat.beat_start_flag = 1;
+			}
+		}else
+    {
+      beat_delay_cnt = 0;
+    }
+     
+    if( modbus.modbus_04_scan_flag == 0)
+    {
+      modbus_04_scan_cnt++;
+      if( modbus_04_scan_cnt == 100 )
+      {
+        modbus_04_scan_cnt = 0;
+        modbus.modbus_04_scan_flag = 1;
+      }
+    }
+	}
+
+	if( htim->Instance == htim6.Instance ) 			//timer6:T = 1ms
+	{
+		if( rs485.timrun != 0 )     //定时器运行标志位
+		{
+			rs485.timout++;
+			if( rs485.timout >=8 )
+			{
+				rs485.timrun = 0;
+        
+				rs485.reflag = 1;	      //超时，说明接收完毕
+			}
+		}
+	}
+}
 
 /* USER CODE END 1 */
