@@ -13,6 +13,8 @@
         "STDIO.H": "cpp",
         "adc.h": "c",
         "modbus_rtu.h": "c",
-        "pic.h": "c"
+        "pic.h": "c",
+        "communication.h": "c",
+        "usart.h": "c"
     }
 }

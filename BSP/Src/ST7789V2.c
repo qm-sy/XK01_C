@@ -672,7 +672,7 @@ void LCD_ShowxFloat( uint16_t x, uint16_t y, float num, uint8_t float_n, uint8_t
     //float_part = (num*10)-dec_part; //小数部分
     sprintf(float_Data, "%ld.%ld",int_num,float_num); // Decimal precision: 3 digits
 
-    LCD_ShowString(x,y,40,12,size,float_Data,back_color,char_color);
+    LCD_ShowString(x,y,48,12,size,float_Data,char_color,back_color);
                                          // u16 width, u16 height,
 }
 

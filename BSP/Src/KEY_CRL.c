@@ -18,7 +18,6 @@ void jump_to_init( void )
 
     /*       复位图标跳动起始点     */
     gui_beat.beat_select = 0;
-
 }
 
 void key_scan( void )
@@ -68,9 +67,11 @@ void KEY1_press()
         delay_ms(500);
     }else
     {
+        gui_info.channel_select++;
         channel_dis();
+        send_to_slave();
     }
-
+    
     buzzer_close();
 }
 
@@ -85,7 +86,7 @@ void KEY2_press()
             gui_info.power_percentage += 5;
         }
         power_dis();
-        write_slave_reg();
+        send_to_slave();
     }else
     {
         switch(gui_beat.beat_select)
@@ -110,6 +111,7 @@ void KEY2_press()
                 {
                     gui_info.mode_num = 3;
                 }
+                mode_select();
                 mode_dis();
 
                 break;
@@ -126,8 +128,9 @@ void KEY2_press()
             default:
                 break;
         }
+        send_to_slave();
     }
-
+    
     buzzer_close();
     key.key_scan_flag = 0;
 }
@@ -160,9 +163,11 @@ void KEY3_press()
             gui_beat.beat_switch = BEAT_ON;
 
             break;
+        
     }
-
-
+    
+    send_to_slave();
+    
     buzzer_close();
     key.key_scan_flag = 0;
 }
@@ -177,8 +182,8 @@ void KEY4_press()
         {
             gui_info.power_percentage -= 5;
         }
+        send_to_slave();
         power_dis();
-        write_slave_reg();
     }else
     {
         switch(gui_beat.beat_select)
@@ -203,6 +208,7 @@ void KEY4_press()
                 {
                     gui_info.mode_num = 1;
                 }
+                mode_select();
                 mode_dis();
                 break;
 
@@ -218,8 +224,9 @@ void KEY4_press()
             default:
                 break;
         }
+        send_to_slave();
     }
-
+    
     buzzer_close();
     key.key_scan_flag = 0;
  }
@@ -240,14 +247,17 @@ void KEY5_press()
     {
         gui_info.sync_switch = 1 - gui_info.sync_switch;
         sync_dis();
+        send_to_slave();
 
         buzzer_close();
         delay_ms(500);
     }else
     {
         jump_to_init();
+        send_to_slave();
     }
 
+    
     buzzer_close();
     key.key_scan_flag = 0;
 }

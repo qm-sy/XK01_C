@@ -13,22 +13,19 @@ typedef struct
     uint8_t modbus_send_buf[48];
     uint8_t modbus_rcv_buf[48];
 
-    uint8_t NTC1_current_value;     //30001
-    uint8_t NTC2_current_value; 
-    uint8_t NTC3_current_value;     //30002
-    uint8_t NTC4_current_value;    
-    uint8_t IR1_adc_value;          //30003
-    uint8_t IR2_adc_value;          
-    uint8_t I_out1_value;           //30004
-    uint8_t I_out2_value;           //30004
-    uint8_t I_out3_value;           //30005
+    uint8_t fan_info;               //40001
+    uint8_t led_info;               //40002
+    uint8_t channel_info;             //40003
+    uint8_t power_info;       //40004
+    uint8_t sync_info;
+    uint8_t mode_num;
+    uint8_t temp;       //40004
+    uint8_t alarm_temp;       //40005
 
-    uint8_t PWM_info;               //40001
-    uint8_t LED_info;               //40002
-    uint8_t AC220_info;             //40003
-    uint8_t NTC1_alarm_value;       //40004
-    uint8_t NTC2_alarm_value;       //40004
-    uint8_t NTC3_alarm_value;       //40005
+    uint8_t envir_temp;
+    uint8_t envir_humidity;
+
+    uint8_t signal_in_flag;
 
     uint8_t modbus_04_scan_flag;
     uint8_t modbus_04_scan_allow;
@@ -57,9 +54,9 @@ void test_hanshu(void);
 void Modbus_fun03_Master( uint16_t reg_addr,uint16_t reg_num );
 void Modbus_fun04_Master( uint16_t reg_addr,uint16_t reg_num );
 void Modbus_fun06_Master( uint16_t reg_addr,uint16_t reg_num, uint16_t reg_val );
-void write_slave_reg( void );
+void send_to_slave( void );
 void send_param( void );
-void get_slave_init_statu_multifunpower( void );
-void get_slave_current_statu_multifunpower( void );
+void get_slave_statu_03( void );
+void get_slave_statu_04( void );
 
 #endif

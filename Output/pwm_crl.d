@@ -45,6 +45,7 @@
 ..\output\pwm_crl.o: ../Core/Inc/usart.h
 ..\output\pwm_crl.o: ../BSP/Inc/PWM_CRL.h
 ..\output\pwm_crl.o: ../BSP/Inc/communication.h
+..\output\pwm_crl.o: ../Emembed/Inc/modbus_rtu.h
 ..\output\pwm_crl.o: ../BSP/Inc/GUI.h
 ..\output\pwm_crl.o: ../BSP/Inc/KEY_CRL.h
 ..\output\pwm_crl.o: ../BSP/Inc/POWER_CRL.h

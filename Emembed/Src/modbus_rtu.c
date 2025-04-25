@@ -12,28 +12,9 @@ MODBUS_INFO modbus;
  */
 void modbus_send_data( uint8_t *buf , uint8_t len )
 {
-    HAL_UART_Transmit(&huart2,(uint8_t*)buf,len,1000);
+    HAL_UART_Transmit(&huart1,(uint8_t*)buf,len,1000);
     
-    while (__HAL_UART_GET_FLAG(&huart2,UART_FLAG_TC) != SET);
-}
-
-uint8_t modbus_wait_receive( void )
-{
-    uint16_t wait_time_cnt = 300;
-
-    while((rs485.reflag!=1)&&(wait_time_cnt!=0))
-    {
-        wait_time_cnt--;
-        delay_ms(1);
-    }
-
-    if( wait_time_cnt == 0 )
-    {
-        printf("receive error \r\n");
-        return 0;
-    }
-
-    return 1;
+    while (__HAL_UART_GET_FLAG(&huart1,UART_FLAG_TC) != SET);
 }
 
 /**
@@ -52,21 +33,18 @@ void Modbus_Event( void )
     if( rs485.reflag == 1 )
     { 
         rs485.reflag = 0;
+        printf("arrive here \r\n");
         /*2.CRC校验                                         */
         crc = MODBUS_CRC16(rs485.rcvbuf, rs485.recount-2);
         rccrc = (rs485.rcvbuf[rs485.recount-2]<<8) | (rs485.rcvbuf[rs485.recount-1]);
-
         if ( crc == rccrc)
         {
             if( rs485.rcvbuf[0] == SLAVE_ADDR )
             {
-                printf("arrive here \r\n");
                 switch ( rs485.rcvbuf[1] )
                 {         
                     case 0x03:		Modbus_Fun3();		break;
                     case 0x04:		Modbus_Fun4();      break;            
-                    // case 0x06:		Modbus_Fun6();		break;        
-                    // case 0x10:	    Modbus_Fun16();		break;  
 
                     default:						    break;
                 }
@@ -79,96 +57,94 @@ void Modbus_Event( void )
 
 void Modbus_Fun3()
 {
-//    uint8_t start_addr_03 = 3;              //Slave reply  DATA1_H address
+   uint8_t start_addr_03 = 3;              //Slave reply  DATA1_H address
 
-//    for( uint16_t i = 0; i < 5; i++)
-//    {
-//        switch (i)
-//        {
-//        case 0:
-//            modbus.PWM_info = rs485.rcvbuf[start_addr_03 + 1];   
-//            gui_info.fan_level = modbus.PWM_info & 0x0F;
-//            gui_info.bake_wind_level = modbus.PWM_info >>4;                    
-//            break;
-
-//        case 1:
-//            modbus.LED_info = rs485.rcvbuf[start_addr_03 + 1];
-//            break;
-
-//        case 2:
-//            modbus.AC220_info = rs485.rcvbuf[start_addr_03 + 1];    
-//            gui_info.ac220_switch = (modbus.AC220_info & 0x01);   
-//            gui_info.power_percentage = modbus.AC220_info>>1;                                    
-//            break; 
-
-//        case 3:
-//            modbus.NTC1_alarm_value = rs485.rcvbuf[start_addr_03 + 1];
-//            modbus.NTC2_alarm_value = rs485.rcvbuf[start_addr_03];
-//            gui_info.ntc1_temp = modbus.NTC1_alarm_value;
-//            gui_info.ntc2_temp = modbus.NTC2_alarm_value;
-//            break;
-
-//        case 4:
-//            modbus.NTC3_alarm_value = rs485.rcvbuf[start_addr_03 + 1];
-//            gui_info.ntc3_temp = modbus.NTC3_alarm_value;
-//            break;   
-
-//        default:
-//            break;
-//        }
-//        start_addr_03 += 2;
-//    }
-
-}
-
-void Modbus_Fun4()
-{
-    uint8_t start_addr_03 = 3;              //Slave reply  DATA1_H address
-    printf("get here \r\n");
-    for( uint16_t i = 0; i < 5; i++)
-    {
-        switch (i)
-        {
+   for( uint16_t i = 0; i < 6; i++)
+   {
+       switch (i)
+       {
         case 0:
-            modbus.NTC1_current_value = rs485.rcvbuf[start_addr_03 + 1];
-            modbus.NTC2_current_value = rs485.rcvbuf[start_addr_03];                       
+            gui_info.fan_level = rs485.rcvbuf[start_addr_03 + 1];   
+
             break;
 
         case 1:
-            modbus.NTC3_current_value = rs485.rcvbuf[start_addr_03 + 1];
+            gui_info.led_switch = rs485.rcvbuf[start_addr_03 + 1];
+
             break;
 
         case 2:
-                                                         
+            gui_info.power_percentage = rs485.rcvbuf[start_addr_03];    
+            gui_info.channel_num      = rs485.rcvbuf[start_addr_03 + 1];
+            
             break; 
 
         case 3:
-            modbus.I_out1_value = rs485.rcvbuf[start_addr_03 + 1];
-            modbus.I_out2_value = rs485.rcvbuf[start_addr_03];
+            gui_info.sync_switch = rs485.rcvbuf[start_addr_03 + 1];
+
             break;
 
         case 4:
-            modbus.I_out3_value = rs485.rcvbuf[start_addr_03 + 1];
+            gui_info.mode_num = rs485.rcvbuf[start_addr_03 + 1];
+
+            break;   
+
+        case 5:
+            gui_info.alarm_temp_value = rs485.rcvbuf[start_addr_03 + 1];
+
             break;   
 
         default:
             break;
+       }
+       start_addr_03 += 2;
+   }
+   gui_info.connect_on_flag = CONNECT;
+}
+
+void Modbus_Fun4()
+{
+    uint8_t start_addr_04 = 3;              //Slave reply  DATA1_H address
+
+    for( uint16_t i = 0; i < 5; i++)
+    {
+        switch (i)
+        {
+            case 0:
+            
+                gui_info.temp_value = rs485.rcvbuf[start_addr_04 + 1];
+                break;
+
+            case 1:
+                
+                break;
+
+            case 2:
+                gui_info.envir_humidity = rs485.rcvbuf[start_addr_04]; 
+                gui_info.envir_temp     = rs485.rcvbuf[start_addr_04 + 1];     
+
+                break; 
+
+            case 3:
+                
+                break;
+
+            case 4:
+                gui_info.gonglv_min =    rs485.rcvbuf[start_addr_04 + 1];      
+
+                break;
+
+            case 5:
+
+                gui_info.gonglv_h = ((rs485.rcvbuf[start_addr_04] << 8) |rs485.rcvbuf[start_addr_04 + 1]);      
+
+                break;
+
+            default:
+                break;
         }
-        start_addr_03 += 2;
+        start_addr_04 += 2;
     }
-}
-
-void Modbus_Fun6()
-{
-    uint8_t send_buf[5] = {0x00,0x01,0x02,0x03,0x04};
-    //printf("success");
-    HAL_UART_Transmit(&huart2,send_buf,5,1000);
-	//printf("success");
-}
-
-void Modbus_Fun16()
-{
-	
 }
 
 /**
@@ -212,9 +188,9 @@ uint16_t MODBUS_CRC16(uint8_t *buf, uint8_t length)
 }
 
 
-void get_slave_init_statu_multifunpower( void )
+void get_slave_statu_03( void )
 {
-    uint8_t send_buf[8] = {0x35,0x03,0x00,0x00,0x00,0x05,0xBD,0x81};
+    uint8_t send_buf[8] = {0x1B,0x03,0x00,0x00,0x00,0x06,0xF2,0xC7};
 
     TX1_485;
     delay_ms(5);
@@ -226,9 +202,9 @@ void get_slave_init_statu_multifunpower( void )
     RX1_485;
 }
 
-void get_slave_current_statu_multifunpower( void )
+void get_slave_statu_04( void )
 {
-    uint8_t send_buf[8] = {0x35,0x04,0x00,0x00,0x00,0x05,0x7D,0x34};
+    uint8_t send_buf[8] = {0x1B,0x04,0x00,0x00,0x00,0x06,0x32,0x72};
 
     TX1_485;
     delay_ms(5);
@@ -238,53 +214,54 @@ void get_slave_current_statu_multifunpower( void )
     modbus_send_data(modbus.modbus_send_buf,8); 
 
     RX1_485;
-
 }
 
-void write_slave_reg( void )
+void send_to_slave( void )
 {
-//    uint8_t send_buf[19];
-//    uint16_t crc;
+   uint8_t send_buf[21];
+   uint16_t crc;
 
-//    modbus.modbus_04_scan_allow = 0;
+   modbus.modbus_04_scan_allow = 0;
 
-//    TX1_485;
-//    delay_ms(5);
+   TX1_485;
+   delay_ms(5);
 
-//    send_buf[0] = 0x35;
-//    send_buf[1] = 0x10;
-//    send_buf[2] = 0x00;
-//    send_buf[3] = 0x00;
-//    send_buf[4] = 0x00;
-//    send_buf[5] = 0x05;
-//    send_buf[6] = 0x0a;
+   send_buf[0] = 0x1B;
+   send_buf[1] = 0x10;
+   send_buf[2] = 0x00;
+   send_buf[3] = 0x00;
+   send_buf[4] = 0x00;
+   send_buf[5] = 0x06;
+   send_buf[6] = 0x0C;
 
-//    send_buf[7] = 0x00;
-//    send_buf[8] = (gui_info.bake_wind_level<<4) | (gui_info.fan_level);
+   send_buf[7] = 0x00;
+   send_buf[8] = gui_info.fan_level;
 
-//    send_buf[9] = 0x00;
-//    send_buf[10] = gui_info.led_switch;
+   send_buf[9] = 0x00;
+   send_buf[10] = gui_info.led_switch;
 
-//    send_buf[11] = 0x00;
-//    send_buf[12] = gui_info.ac220_switch | gui_info.power_percentage<<1;
+   send_buf[11] = gui_info.power_percentage;
+   send_buf[12] = gui_info.channel_num;
 
-//    send_buf[13] = gui_info.ntc2_temp;
-//    send_buf[14] = gui_info.ntc1_temp;
+   send_buf[13] = 0x00;
+   send_buf[14] = gui_info.sync_switch;
 
-//    send_buf[15] = 0x00;
-//    send_buf[16] = gui_info.ntc3_temp;
+   send_buf[15] = gui_info.mode_allow;
+   send_buf[16] = gui_info.mode_num;
 
-//    crc = MODBUS_CRC16(send_buf,17);
+   send_buf[17] = 0x00;
+   send_buf[18] = gui_info.alarm_temp_value;
 
-//    send_buf[17] = crc>>8;
-//    send_buf[18] = crc;
+   crc = MODBUS_CRC16(send_buf,19);
 
-//    memcpy(modbus.modbus_send_buf,send_buf,19);
+   send_buf[19] = crc>>8;
+   send_buf[20] = crc;
 
-//    modbus_send_data(modbus.modbus_send_buf,19);
-//    RX1_485;
+   memcpy(modbus.modbus_send_buf,send_buf,21);
 
-//    refresh_icon();
-//    modbus.modbus_04_scan_allow = 1;
+   modbus_send_data(modbus.modbus_send_buf,21);
+   RX1_485;
+   modbus.modbus_04_scan_allow = 1;
+   gui_info.mode_allow = 0;
 }
 

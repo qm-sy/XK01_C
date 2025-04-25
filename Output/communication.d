@@ -37,3 +37,15 @@
 ..\output\communication.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 ..\output\communication.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 ..\output\communication.o: ../Core/Inc/usart.h
+..\output\communication.o: ../Emembed/Inc/modbus_rtu.h
+..\output\communication.o: ../BSP/Inc/PWM_CRL.h
+..\output\communication.o: ../Core/Inc/tim.h
+..\output\communication.o: ../BSP/Inc/POWER_CRL.h
+..\output\communication.o: ../BSP/Inc/GUI.h
+..\output\communication.o: ../BSP/Inc/ST7789V2.h
+..\output\communication.o: ../SYSTEM/delay.h
+..\output\communication.o: ../Emembed/Inc/modbus_rtu.h
+..\output\communication.o: ../BSP/Inc/KEY_CRL.h
+..\output\communication.o: ../BSP/Inc/GUI.h
+..\output\communication.o: ../BSP/Inc/POWER_CRL.h
+..\output\communication.o: ../BSP/Inc/Communication.h

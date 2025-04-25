@@ -6,11 +6,11 @@
 #include "GUI.h"
 #include "POWER_CRL.h"
 
-#define KEY1        30
-#define KEY2        29  
+#define KEY1        15
+#define KEY2        23  
 #define KEY3        27
-#define KEY4        23
-#define KEY5        15
+#define KEY4        29
+#define KEY5        30
 
 #define B1_VAL HAL_GPIO_ReadPin(button1_GPIO_Port,button1_Pin)
 #define B2_VAL HAL_GPIO_ReadPin(button2_GPIO_Port,button2_Pin)

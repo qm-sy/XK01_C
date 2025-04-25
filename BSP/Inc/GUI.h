@@ -27,6 +27,8 @@
 #define SYNC_ON         1
 #define SYNC_OFF        0
 
+#define CONNECT         1
+#define UNCONNECT       0
 /*      需要跳动显示的内容   */
 // #define AC220_SET_ICON      1
 // #define NTC_TEMP1_STR       11
@@ -50,11 +52,21 @@ typedef struct
     uint8_t  fan_level;
     uint8_t  led_switch;
     uint8_t  mode_num;
+    uint8_t  mode_allow;
     uint8_t  power_percentage;       
     uint8_t  channel_num;
+    uint8_t  channel_select;
     uint8_t  sync_switch;
     uint8_t  alarm_temp_value;
     uint8_t  temp_value;
+    uint8_t  envir_temp;
+    uint8_t  envir_humidity;
+    uint8_t  gonglv_min;
+    uint16_t gonglv_h;
+    float    gonglv;
+
+    uint8_t connect_on_flag;
+
 }GUI_INFO;
 
 typedef struct 
@@ -91,6 +103,11 @@ void power_dis( void );
 void channel_dis( void );
 void alarm_temp_dis( void );
 void temp_dis( void );
+void connect_dis( void );
+void mode_select( void );
+void alarm_icon_dis( void );
+void dht11_dis( void );
+void channel_switch( void );
 
 #endif
 
