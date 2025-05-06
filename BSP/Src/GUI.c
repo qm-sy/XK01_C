@@ -335,7 +335,7 @@ void slave_statu_update( void )
         modbus.modbus_04_scan_allow = 0;
     }   
 }
-
+¡¤
 void gui_icon_init( void )
 {
     /*              connect icon                */

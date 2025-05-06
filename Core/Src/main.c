@@ -123,6 +123,7 @@ int main(void)
 	LCD_Init();
 	gui_init();
 	gui_icon_init();
+	printf("========= code start ========= \r\n");
 	while (!gui_info.connect_on_flag)
 	{
 		get_slave_statu_03();
@@ -133,7 +134,7 @@ int main(void)
 	}
 	refresh_icon();
 	/* USER CODE END 2 */
-	printf("========= code start ========= \r\n");
+	
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1)
